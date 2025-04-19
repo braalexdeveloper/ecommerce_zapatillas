@@ -33,7 +33,8 @@ export class ShoeController {
 
     async createShoe(req: Request, res: Response) {
         try {
-            const shoeCreated = await this.shoeService.createShoe(req.body);
+            const files = req.files as Express.Multer.File[];
+            const shoeCreated = await this.shoeService.createShoe(req.body,files);
             res.status(201).json({
                 message: "Zapatilla creada correctamente!",
                 shoe: shoeCreated
@@ -42,6 +43,19 @@ export class ShoeController {
 
             res.status(500).json({ error: error instanceof Error ? error.message : "Error al crear zapatilla" });
 
+        }
+    }
+
+    async deleteShoe(req: Request, res: Response){
+        try {
+            const message = await this.shoeService.deleteShoe(Number(req.params.id));
+            res.status(200).json({message});
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                res.status(404).json({ error: error.message });
+            } else {
+                res.status(500).json({ error: error instanceof Error ? error.message : "Error al eliminar zapatilla" });
+            }
         }
     }
 

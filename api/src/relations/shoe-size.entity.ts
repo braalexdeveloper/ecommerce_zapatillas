@@ -12,7 +12,7 @@ export class ShoeSize{
     @IsNotEmpty()
     stock!:number;
 
-    @ManyToOne(()=>Shoe,shoe=>shoe.shoeSizes)
+    @ManyToOne(()=>Shoe,shoe=>shoe.shoeSizes,{onDelete:'CASCADE'})
     shoe!:Shoe
 
     @ManyToOne(()=>Size,size=>size.shoeSizes)

@@ -19,15 +19,15 @@ export class Shoe{
     @IsOptional() // Indica que el campo es opcional en las validaciones
     description!:string;
 
-    @Column()
+    @Column({ type: 'decimal', precision: 10, scale: 2 })
     @IsNotEmpty()
     price!:number;
 
     
-    @OneToMany(()=>CategoryShoe,categoryShoe=>categoryShoe.shoe)
+    @OneToMany(()=>CategoryShoe,categoryShoe=>categoryShoe.shoe,{ cascade: true })
     categoryShoes!:CategoryShoe[]
 
-    @OneToMany(()=>ShoeSize,shoeSize=>shoeSize.shoe)
+    @OneToMany(()=>ShoeSize,shoeSize=>shoeSize.shoe,{ cascade: true })
     shoeSizes!:ShoeSize[]
 
     @ManyToOne(()=>Brand,brand=>brand.shoes)

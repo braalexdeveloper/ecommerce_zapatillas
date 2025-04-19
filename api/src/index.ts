@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { AppDataSource } from "./config/database";
 import categoryRoutes from './categories/category.route';
 import brandRoutes from './brands/brand.route';
+import shoeRoutes from './shoes/shoe.route';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api',categoryRoutes);
 app.use('/api',brandRoutes);
+app.use('/api',shoeRoutes);
 
 AppDataSource.initialize().then(()=>{
 

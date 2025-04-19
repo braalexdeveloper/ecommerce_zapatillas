@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "../categories/category.entity";
 import { Shoe } from "../shoes/shoe.entity";
 
@@ -10,8 +10,8 @@ export class CategoryShoe{
     @ManyToOne(()=>Category,category=>category.categoryShoes)
     category!:Category
 
-    @ManyToOne(()=>Shoe,shoe=>shoe.categoryShoes)
-    shoe!:Shoe
+    @ManyToOne(()=>Shoe,shoe=>shoe.categoryShoes,{onDelete:'CASCADE'})
+    shoe!:Shoe 
 
 
 }
