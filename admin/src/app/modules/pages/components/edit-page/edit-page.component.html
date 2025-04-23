@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-4">
+      <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-file-alt mr-2"></i> Edición de Página
+      </h1>
+      <a routerLink="/pages" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left mr-2"></i> Volver al listado
+      </a>
+    </div>
+  
+    <!-- Form Card -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 bg-white">
+        <h6 class="m-0 font-weight-bold text-primary">Complete los datos de la página</h6>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="updatePage()">
+          <!-- Título -->
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Título</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="title" name="title" [(ngModel)]="title" placeholder="Ingrese el título de la página" required>
+            </div>
+          </div>
+  
+          
+  
+          <!-- Contenido -->
+          <div class="form-group row">
+            <label for="content" class="col-sm-2 col-form-label">Contenido</label>
+            <div class="col-sm-10">
+              
+              <div #summernote></div>
+            </div>
+          </div>
+  
+          <!-- Imagen principal -->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Imagen Principal</label>
+            <div class="col-sm-10">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="mainImage" (change)="onFileSelected($event)" accept="image/*">
+                <label class="custom-file-label" for="mainImage">Seleccionar archivo...</label>
+              </div>
+              <small class="form-text text-muted">Tamaño recomendado: 1200x630px (relación 16:9)</small>
+              <div class="mt-2 image-preview" style="max-width: 300px;">
+                <img  src="{{urlimage}}" alt="Vista previa de la imagen" class="img-thumbnail">
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+              <button type="submit" class="btn btn-primary mr-2">
+                <i class="fas fa-save mr-2"></i> Guardar Página
+              </button>
+              <button type="reset" class="btn btn-outline-secondary">
+                <i class="fas fa-undo mr-2"></i> Limpiar Formulario
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Script para vista previa de imagen (opcional) -->
+  <script>
+    document.getElementById('mainImage').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('imagePreview');
+      const previewContainer = document.querySelector('.image-preview');
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          previewContainer.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+        document.querySelector('.custom-file-label').textContent = file.name;
+      }
+    });
+  </script>

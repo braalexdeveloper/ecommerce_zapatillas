@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-12 my-2">
+    <button routerLink="/categories/create" class="btn btn-success">Crear Nuevo</button>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Lista de Categorias</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Imagen</th>
+              <th>Acciones</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let category of categories; let index = index">
+              <td>{{index+1}}</td>
+              <td>{{category.name}}</td>
+              <td>{{category.image}}</td>
+              <td>
+                <button routerLink="/categories/update/{{category.id}}" class="btn btn-warning">Editar</button>
+                <button (click)="delete(category.id)" class="btn btn-danger mx-2">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Imagen</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>

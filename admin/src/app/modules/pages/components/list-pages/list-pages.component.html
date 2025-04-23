@@ -1,0 +1,79 @@
+<div class="container-fluid p-4">
+    <!-- Título -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-file-alt mr-2"></i> Páginas
+        </h1>
+    </div>
+
+    <!-- Botón Agregar -->
+    <div class="mb-4">
+        <button class="btn btn-primary" routerLink="/pages/create">
+            <i class="fas fa-plus mr-2"></i> Agregar Nueva Página
+        </button>
+    </div>
+
+    <!-- Tabla de Registros -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-white">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de Páginas</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" width="50">#</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Fecha Creación</th>
+                            <th scope="col" width="120">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Ejemplo de filas -->
+                        <tr *ngFor="let page of pages">
+                            <td>1</td>
+                            <td>{{page.title}}</td>
+                            <td>/home</td>
+                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{page.image}}" alt="Avatar" class="rounded-circle me-2 me-md-3" width="32" height="32">
+                                    
+                                  </div>
+                            </td>
+                            <td>15/03/2023</td>
+                            <td>
+                                <a routerLink="/pages/edit/{{page.id}}" class="btn btn-sm btn-outline-primary mr-1">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger" (click)="deletePage(page.id)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

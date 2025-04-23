@@ -1,0 +1,7 @@
+/* You can add global styles to this file, and also import other style files */
+/* Añade esto a tu archivo de estilos para ajustar la apariencia del select */
+.form-control[multiple] {
+    height: auto;
+    min-height: 150px; /* Ajusta esto según tus necesidades */
+    overflow-y: auto;
+  }

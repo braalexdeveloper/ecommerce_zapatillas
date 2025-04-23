@@ -1,0 +1,72 @@
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Modificar Post</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form (ngSubmit)="update()">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="title">Titulo<span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="title" name="title" [(ngModel)]="title" placeholder="Escribe un titulo">
+            </div>
+
+            <div class="form-group">
+              <label>Categorias<span class="text-danger">*</span></label>
+              <select class="form-control"   name="categoryIdValue" [(ngModel)]="categoryIdValue" (change)="handleSelect()" style="width: 100%;" >
+                <option [ngValue]="null" disabled selected>Selecciona una o más categorías</option>
+                <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+              
+              </select>
+              
+            </div>
+
+            <div class="form-group bg-light">
+              <button class="btn btn-primary btn-sm mx-2" *ngFor="let categoryId of categoriesIds" (click)="deleteCategorySelect(categoryId)">{{ nameCategory(categoryId) || 'Categoría no encontrada' }}</button>
+            </div>
+
+            <div class="form-group">
+                <img class="img-fluid img-thumbnail" width="300" src="http://localhost:8000/storage/{{imageUrl}}" alt="">
+            </div>
+           
+            <div class="form-group">
+               
+              <label for="exampleInputFile">Cambiar Imagen</label>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="exampleInputFile" (change)="handleImage($event)">
+                  <label class="custom-file-label" for="exampleInputFile">Escoge una imagen</label>
+                </div>
+                <div class="input-group-append">
+                  <span class="input-group-text">Upload</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label for="titulo">Contenido<span class="text-danger">*</span></label>
+                <textarea id="summernote" class="form-control" name="content" [(ngModel)]="content"></textarea>
+            </div>
+
+                                               
+          </div>
+          <!-- /.card-body -->
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button routerLink="/posts" class="btn btn-danger mx-2">Cancelar</button>
+          </div>
+        </form>
+
+       
+      </div>
+      <!-- /.card -->
+        
+
+    </div>
+ 
+  </div>
