@@ -20,7 +20,9 @@ export class ShoeService {
     }
 
     async getShoes() {
-        return await this.shoeRepository.find();
+        return await this.shoeRepository.find({
+            relations:["brand","images"]
+        });
     }
 
     async getShoe(id: number) {
@@ -76,13 +78,14 @@ export class ShoeService {
                 await categoryShoeRepo.save(categoryShoes);
             }
 
+            let parseSizes=JSON.parse(sizes);
             // Asociar tallas (ShoeSize)
-            if (sizes && sizes.length > 0) {
-                const sizeIds = sizes.map((s: any) => s.id);
+            if (parseSizes && parseSizes.length > 0) {
+                const sizeIds = parseSizes.map((s: any) => s.id);
                 const existingSizes = await sizeRepo.findByIds(sizeIds);
                 console.log(existingSizes)
                 const sizeShoes = existingSizes.map(size => {
-                    const inputSize = sizes.find((s: any) => s.id === size.id);
+                    const inputSize = parseSizes.find((s: any) => s.id === size.id);
                     return sizeShoeRepo.create({
                         shoe: shoeSaved,
                         size,

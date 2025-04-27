@@ -1,10 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ShoeService } from '../../service/shoe.service';
 
 @Component({
   selector: 'app-list-shoes',
   templateUrl: './list-shoes.component.html',
   styleUrls: ['./list-shoes.component.css']
 })
-export class ListShoesComponent {
+export class ListShoesComponent implements OnInit{
+shoes:any[]=[];
+public apiUrl = 'http://127.0.0.1:5000'; 
+  constructor(
+    private _shoeService:ShoeService
+  ){
 
+  }
+
+  ngOnInit(): void {
+      this.getShoes();
+  }
+
+  getShoes(){
+this._shoeService.getShoes().subscribe({
+  next:(data)=>{
+    console.log(data)
+    this.shoes=data;
+  }
+})
+  }
 }

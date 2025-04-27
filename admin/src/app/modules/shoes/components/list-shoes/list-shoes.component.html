@@ -8,9 +8,9 @@
 
     <!-- Botón Agregar -->
     <div class="mb-4">
-        <a class="btn btn-primary" routerLink="/shoes/create">
+        <button class="btn btn-primary" routerLink="/shoes/create">
             <i class="fas fa-plus mr-2"></i> Agregar Nueva Zapatilla
-        </a>
+        </button>
     </div>
 
     <!-- Tabla de Registros -->
@@ -24,28 +24,30 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col" width="50">#</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Estado</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stock</th>
                             <th scope="col">Imagen</th>
-                            <th scope="col">Fecha Creación</th>
+                            
                             <th scope="col" width="120">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Ejemplo de filas -->
-                        <tr>
+                        <tr *ngFor="let shoe of shoes">
                             <td>1</td>
-                            <td></td>
-                            <td>/home</td>
-                            <td><span class="badge badge-success">Activo</span></td>
+                            <td>{{shoe.name}}</td>
+                            <td>{{shoe.brand.name}}</td>
+                            <td>{{shoe.price}}</td>
+                            <td>15/03/2023</td>
                             <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="" alt="Avatar" class="rounded-circle me-2 me-md-3" width="32" height="32">
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <img [src]="apiUrl+shoe.images[0].url" alt="shoe.name" class="rounded " width="50" height="50">
                                     
                                   </div>
                             </td>
-                            <td>15/03/2023</td>
+                            
                             <td>
                                 <a routerLink="" class="btn btn-sm btn-outline-primary mr-1">
                                     <i class="fas fa-edit"></i>

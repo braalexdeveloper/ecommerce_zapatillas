@@ -1,1 +1,133 @@
-dsfsdf
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-4">
+      <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-file-alt mr-2"></i> Registro de Zapatilla
+      </h1>
+      <a routerLink="/shoes" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left mr-2"></i> Volver al listado
+      </a>
+    </div>
+  
+    <!-- Form Card -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 bg-white">
+        <h6 class="m-0 font-weight-bold text-primary">Complete los datos de la nueva zapatilla</h6>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="createShoe()">
+          
+       <!-- Nombre -->
+       <div class="form-group">
+        <label for="name">Nombre</label>
+        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="name" placeholder="Ej: Zapatilla Running XZ-2000">
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea class="form-control" id="description" name="description" [(ngModel)]="description" rows="3" placeholder="Descripción detallada del producto"></textarea>
+      </div>
+
+      <!-- Precio -->
+      <div class="form-group">
+        <label for="price">Precio</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input type="number" class="form-control" id="price" name="price" [(ngModel)]="price" placeholder="0.00" step="0.01">
+        </div>
+      </div>
+
+      <!-- Categorías (Select) -->
+      <div class="form-group">
+        <label for="category">Categoría</label>
+        <select class="form-control" id="category">
+          <option selected disabled>Seleccione una categoría</option>
+          <option>Running</option>
+          <option>Baloncesto</option>
+          <option>Fútbol</option>
+          <option>Casual</option>
+          <option>Skate</option>
+        </select>
+      </div>
+
+      <!-- Tallas (Checkboxes) -->
+      <div class="form-group">
+        <label>Tallas Disponibles</label>
+        <div class="d-flex flex-wrap">
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-36" value="36">
+            <label class="custom-control-label" for="size-36">36</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-37" value="37">
+            <label class="custom-control-label" for="size-37">37</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-38" value="38">
+            <label class="custom-control-label" for="size-38">38</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-39" value="39">
+            <label class="custom-control-label" for="size-39">39</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-40" value="40">
+            <label class="custom-control-label" for="size-40">40</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-41" value="41">
+            <label class="custom-control-label" for="size-41">41</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-42" value="42">
+            <label class="custom-control-label" for="size-42">42</label>
+          </div>
+          <div class="custom-control custom-checkbox mr-3 mb-2">
+            <input type="checkbox" class="custom-control-input" id="size-43" value="43">
+            <label class="custom-control-label" for="size-43">43</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imágenes (Upload con preview) -->
+      <div class="form-group">
+        <label>Imágenes del Producto</label>
+        <div class="custom-file mb-3">
+          <input type="file" class="custom-file-input" id="images" (change)="onImageSelected($event)" multiple accept="image/*">
+          <label class="custom-file-label" for="images">Seleccionar imágenes...</label>
+        </div>
+        
+        <div class="image-preview-container d-flex flex-wrap">
+          <!-- Preview de imágenes aparecerá aquí -->
+          <div class="alert alert-info w-100">
+            Las imágenes seleccionadas aparecerán aquí. Haz clic en una para establecerla como principal.
+          </div>
+          <div *ngIf="previewImages.length > 0">
+            <div *ngFor="let img of previewImages; index as i">
+              <img [src]="img.url" width="150" [style.border]="img.is_main ? '3px solid green' : 'none'" />
+              <button type="button" (click)="setPrincipalImage(i)">Marcar como principal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+         
+  
+          <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+              <button type="submit" class="btn btn-primary mr-2">
+                <i class="fas fa-save mr-2"></i> Guardar Página
+              </button>
+              <button type="reset" class="btn btn-outline-secondary">
+                <i class="fas fa-undo mr-2"></i> Limpiar Formulario
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
