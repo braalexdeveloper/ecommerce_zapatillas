@@ -34,6 +34,7 @@ export class ShoeController {
     async createShoe(req: Request, res: Response) {
         try {
             const files = req.files as Express.Multer.File[];
+                        
             const shoeCreated = await this.shoeService.createShoe(req.body,files);
             res.status(201).json({
                 message: "Zapatilla creada correctamente!",

@@ -6,5 +6,5 @@ export interface ShoeInterface{
     brand_id:number;
     categories:any;
     sizes:any;
-    
+    arrayImgsPrincipal:any;
 }

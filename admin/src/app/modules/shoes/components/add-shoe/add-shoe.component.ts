@@ -13,7 +13,7 @@ export class AddShoeComponent {
   brand_id: number = 2;
   categories: any;
   sizes: any;
-  images: File[] = [];
+  
 
   previewImages: any[]=[];
 
@@ -25,12 +25,12 @@ export class AddShoeComponent {
 
   onImageSelected(event: any): void {
     const files: FileList = event.target.files;
-    this.images = [];
+   
 
     for (let i = 0; i < files.length; i++) {
 
       const reader = new FileReader();
-      this.images.push(files[i]);
+    
 
       reader.onload = () => {
         this.previewImages.push({
@@ -42,7 +42,7 @@ export class AddShoeComponent {
 
       reader.readAsDataURL(files[i])
     }
-    console.log(this.images)
+   
     console.log(this.previewImages)
   }
 
@@ -75,8 +75,9 @@ export class AddShoeComponent {
     formData.append('sizes', JSON.stringify(sizesArray));
 
     // Enviar imágenes individualmente
-    this.images.forEach((image) => {
-      formData.append('arrayImages', image);
+    this.previewImages.forEach((image) => {
+      formData.append('arrayImages', image.file);
+      formData.append('arrayImgsPrincipal',image.is_main);
     });
 
 

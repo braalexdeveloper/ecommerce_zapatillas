@@ -42,8 +42,15 @@
                             <td>{{shoe.price}}</td>
                             <td>15/03/2023</td>
                             <td>
-                                <div class="d-flex align-items-center justify-content-start">
-                                    <img [src]="apiUrl+shoe.images[0].url" alt="shoe.name" class="rounded " width="50" height="50">
+                                <div  class="d-flex align-items-center justify-content-start">
+                                    <ng-container *ngFor="let image of shoe.images">
+                                        <img *ngIf="image.is_main === true" 
+                                             [src]="apiUrl + image.url" 
+                                             [alt]="shoe.name" 
+                                             class="rounded" 
+                                             width="50" 
+                                             height="50">
+                                      </ng-container>
                                     
                                   </div>
                             </td>

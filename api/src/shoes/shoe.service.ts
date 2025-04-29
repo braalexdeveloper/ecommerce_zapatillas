@@ -35,7 +35,7 @@ export class ShoeService {
     }
 
     async createShoe(shoe: ShoeInterface,files:any) {
-        const { categories, sizes, brand_id,...shoeData } = shoe;
+        const { categories, sizes, brand_id,arrayImgsPrincipal,...shoeData } = shoe;
         
         return await AppDataSource.transaction(async (manager) => {
             const shoeRepo = manager.getRepository(Shoe);
@@ -97,16 +97,19 @@ export class ShoeService {
             }
 
             //images
-            const arrayImages=files.map((file:any)=>{
+            const arrayImages=files.map((file:any,index:number)=>{
                 return {
                  url: `/uploads/${file.filename}`,
+                 is_main:arrayImgsPrincipal[index]==="true"
                 }
              });
+
              
              if(arrayImages.length>0){
               const imageEntities=arrayImages.map((el:any)=>{
                 return imageRepo.create({
                     url:el.url,
+                    is_main:el.is_main,
                     shoe:shoeSaved
                 });
               });
