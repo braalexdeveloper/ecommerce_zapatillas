@@ -11,6 +11,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 import { UsersComponent } from './modules/users/users.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ListBrandsComponent } from './modules/brands/components/list-brands/list-brands.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     FooterComponent,
     SidebarComponent,
     UsersComponent,
+    ListBrandsComponent,
     
    // PostsComponent,
     

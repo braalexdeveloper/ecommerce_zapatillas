@@ -6,6 +6,7 @@ import { AppDataSource } from "./config/database";
 import categoryRoutes from './categories/category.route';
 import brandRoutes from './brands/brand.route';
 import shoeRoutes from './shoes/shoe.route';
+import sizeRoutes from './sizes/size.route';
 import path from "path";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api',categoryRoutes);
 app.use('/api',brandRoutes);
 app.use('/api',shoeRoutes);
+app.use('/api',sizeRoutes);
 
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 

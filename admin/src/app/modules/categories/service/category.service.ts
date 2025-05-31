@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CategoryService {
-apiUrl='https://apiblog.brayanweb.com/api/'
+private apiUrl = 'http://127.0.0.1:5000/api/'; 
 
   constructor(
     private http:HttpClient
