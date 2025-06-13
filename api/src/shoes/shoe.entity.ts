@@ -33,6 +33,6 @@ export class Shoe{
     @ManyToOne(()=>Brand,brand=>brand.shoes)
     brand!:Brand
 
-    @OneToMany(()=>Image,image=>image.shoe, { cascade: true })
+    @OneToMany(()=>Image,image=>image.shoe, { cascade: true , onDelete: "CASCADE"})
     images?:Image[]
 }

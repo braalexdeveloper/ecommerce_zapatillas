@@ -15,8 +15,20 @@ export class ShoeService {
     return this.http.get(this.apiUrl+"shoes");
   }
 
+  getShoe(id:string | null):Observable<any>{
+return this.http.get(this.apiUrl+"shoes/"+id);
+  }
+
   createShoe(shoe:any):Observable<any>{
     return this.http.post(this.apiUrl+"shoes",shoe);
+  }
+
+  updateShoe(id:number,shoe:any):Observable<any>{
+    return this.http.put(this.apiUrl+"shoes/"+id,shoe);
+  }
+
+  deleteShoe(id:number):Observable<any>{
+    return this.http.delete(this.apiUrl+"shoes/"+id);
   }
 
 }

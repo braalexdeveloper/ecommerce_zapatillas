@@ -10,6 +10,9 @@ import { Image } from "../images/image.entity";
 import { CategoryShoe } from "../relations/category-shoe.entity";
 import { ShoeSize } from "../relations/shoe-size.entity";
 
+import * as fs from 'fs';
+import * as path from 'path';
+
 export class ShoeService {
     private shoeRepository: Repository<Shoe>;
 
@@ -21,22 +24,22 @@ export class ShoeService {
 
     async getShoes() {
         return await this.shoeRepository.find({
-            relations:["brand","images"]
+            relations: ["brand", "images"]
         });
     }
 
     async getShoe(id: number) {
         const shoeFound = await this.shoeRepository.findOne({
             where: { id },
-            relations: ["brand", "categoryShoes.category", "shoeSizes.size"]
+            relations: ["brand", "categoryShoes.category", "shoeSizes.size","images"]
         });
         if (!shoeFound) throw new NotFoundError("Zapatilla no encontrada");
         return shoeFound;
     }
 
-    async createShoe(shoe: ShoeInterface,files:any) {
-        const { categories, sizes, brand_id,arrayImgsPrincipal,...shoeData } = shoe;
-        
+    async createShoe(shoe: ShoeInterface, files: any) {
+        const { categories, sizes, brand_id, arrayImgsPrincipal, ...shoeData } = shoe;
+
         return await AppDataSource.transaction(async (manager) => {
             const shoeRepo = manager.getRepository(Shoe);
             const categoryRepo = manager.getRepository(Category);
@@ -44,7 +47,7 @@ export class ShoeService {
             const brandRepo = manager.getRepository(Brand);
             const categoryShoeRepo = manager.getRepository(CategoryShoe);
             const sizeShoeRepo = manager.getRepository(ShoeSize);
-            const imageRepo=manager.getRepository(Image);
+            const imageRepo = manager.getRepository(Image);
 
             // Crear la zapatilla
             const createdShoe = shoeRepo.create(shoeData);
@@ -56,7 +59,7 @@ export class ShoeService {
                 createdShoe.brand = brand;
             }
 
-            
+
 
             // Guardar la zapatilla
             const shoeSaved = await shoeRepo.save(createdShoe);
@@ -78,7 +81,7 @@ export class ShoeService {
                 await categoryShoeRepo.save(categoryShoes);
             }
 
-            let parseSizes=JSON.parse(sizes);
+            let parseSizes = JSON.parse(sizes);
             // Asociar tallas (ShoeSize)
             if (parseSizes && parseSizes.length > 0) {
                 const sizeIds = parseSizes.map((s: any) => s.id);
@@ -97,25 +100,25 @@ export class ShoeService {
             }
 
             //images
-            const arrayImages=files.map((file:any,index:number)=>{
+            const arrayImages = files.map((file: any, index: number) => {
                 return {
-                 url: `/uploads/${file.filename}`,
-                 is_main:arrayImgsPrincipal[index]==="true"
+                    url: `/uploads/${file.filename}`,
+                    is_main: arrayImgsPrincipal[index] === "true"
                 }
-             });
+            });
 
-             
-             if(arrayImages.length>0){
-              const imageEntities=arrayImages.map((el:any)=>{
-                return imageRepo.create({
-                    url:el.url,
-                    is_main:el.is_main,
-                    shoe:shoeSaved
+
+            if (arrayImages.length > 0) {
+                const imageEntities = arrayImages.map((el: any) => {
+                    return imageRepo.create({
+                        url: el.url,
+                        is_main: el.is_main,
+                        shoe: shoeSaved
+                    });
                 });
-              });
-              await imageRepo.save(imageEntities);
-              shoeSaved.images=imageEntities;
-             }
+                await imageRepo.save(imageEntities);
+                shoeSaved.images = imageEntities;
+            }
 
             return shoeSaved;
         });
@@ -123,15 +126,29 @@ export class ShoeService {
 
     async deleteShoe(id: number) {
         const shoe = await this.shoeRepository.findOne({
-            where: { id }
+            where: { id },
+            relations: ["images"]
         });
 
         if (!shoe) {
             throw new NotFoundError("Zapatilla no encontrada");
         }
 
-        // Opcional: Si deseas eliminar manualmente relaciones (dependiendo del cascade en tu entidad)
-        // También puedes usar `AppDataSource.transaction` si quieres asegurarte de todo
+        //Eliminar los archivos del sistema de archivos
+        if (shoe.images && shoe.images.length > 0) {
+            for (const image of shoe.images) {
+                const imagePath = path.join(process.cwd(), 'src', 'uploads', path.basename(image.url));
+                console.log(imagePath)
+                try {
+                  if(fs.existsSync(imagePath)){
+                    fs.unlinkSync(imagePath);//Elimina el archivo fisico
+                  }
+                } catch (error) {
+                   console.error(`Error eliminando archivo: ${imagePath}`,error);
+                }
+            }
+        }
+
 
         await this.shoeRepository.remove(shoe);
 
