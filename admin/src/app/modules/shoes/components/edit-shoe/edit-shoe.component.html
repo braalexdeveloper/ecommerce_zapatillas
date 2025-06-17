@@ -90,7 +90,7 @@
 
           <div class="image-preview-container d-flex flex-wrap">
             <!-- Preview de imágenes aparecerá aquí -->
-            <div class="alert alert-info w-100">
+            <div class="alert alert-danger w-100">
               Las imágenes seleccionadas aparecerán aquí. Haz clic en una para establecerla como principal.
             </div>
             <div *ngIf="previewImages.length > 0">
@@ -99,6 +99,14 @@
                 <button type="button" (click)="setPrincipalImage(i)">Marcar como principal</button>
               </div>
             </div>
+
+             <div *ngIf="imagesFound.length > 0">
+              <div *ngFor="let img of imagesFound">
+                <img [src]="'http://127.0.0.1:5000'+img.url" width="150" [style.border]="img.is_main ? '3px solid green' : 'none'" />
+                
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -107,7 +115,7 @@
         <div class="form-group row">
           <div class="col-sm-10 offset-sm-2">
             <button type="submit" class="btn btn-primary mr-2">
-              <i class="fas fa-save mr-2"></i> Guardar Zapatilla
+              <i class="fas fa-save mr-2"></i> Modificar Zapatilla
             </button>
             <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">
   <i class="fas fa-undo mr-2"></i> Limpiar Formulario

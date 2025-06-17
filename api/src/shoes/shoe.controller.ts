@@ -47,6 +47,22 @@ export class ShoeController {
         }
     }
 
+    async updateShoe(req: Request, res: Response) {
+        try {
+            const files = req.files as Express.Multer.File[];
+                        
+            const shoeUpdate = await this.shoeService.updateShoe(Number(req.params.id),req.body,files);
+            res.status(201).json({
+                message: "Zapatilla actualizada correctamente!",
+                shoe: shoeUpdate
+            });
+        } catch (error) {
+
+            res.status(500).json({ error: error instanceof Error ? error.message : "Error al actualizar zapatilla" });
+
+        }
+    }
+
     async deleteShoe(req: Request, res: Response){
         try {
             const message = await this.shoeService.deleteShoe(Number(req.params.id));

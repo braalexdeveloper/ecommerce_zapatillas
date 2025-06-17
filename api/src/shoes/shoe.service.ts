@@ -31,11 +31,13 @@ export class ShoeService {
     async getShoe(id: number) {
         const shoeFound = await this.shoeRepository.findOne({
             where: { id },
-            relations: ["brand", "categoryShoes.category", "shoeSizes.size","images"]
+            relations: ["brand", "categoryShoes.category", "shoeSizes.size", "images"]
         });
         if (!shoeFound) throw new NotFoundError("Zapatilla no encontrada");
         return shoeFound;
     }
+
+
 
     async createShoe(shoe: ShoeInterface, files: any) {
         const { categories, sizes, brand_id, arrayImgsPrincipal, ...shoeData } = shoe;
@@ -124,6 +126,126 @@ export class ShoeService {
         });
     }
 
+    async updateShoe(id: number, shoe: ShoeInterface, files: any) {
+        let { categories, sizes, brand_id, arrayImgsPrincipal, ...shoeData } = shoe;
+
+        return await AppDataSource.transaction(async (manager) => {
+            const shoeRepo = manager.getRepository(Shoe);
+            const categoryRepo = manager.getRepository(Category);
+            const sizeRepo = manager.getRepository(Size);
+            const brandRepo = manager.getRepository(Brand);
+            const categoryShoeRepo = manager.getRepository(CategoryShoe);
+            const sizeShoeRepo = manager.getRepository(ShoeSize);
+            const imageRepo = manager.getRepository(Image);
+
+            // Buscar la zapatilla a actualizar
+            const shoeFound = await shoeRepo.findOne({
+                where: { id },
+                relations: ['brand', 'categoryShoes', 'shoeSizes', 'images']
+            });
+
+            if (!shoeFound) throw new NotFoundError('Zapatilla no encontrada');
+
+            // Actualizar datos básicos
+            Object.assign(shoeFound, shoeData);
+
+            //Actualizar la marca
+            if (brand_id) {
+                const brand = await brandRepo.findOneBy({ id: brand_id });
+                if (!brand) throw new NotFoundError('Marca no encontrada');
+                shoeFound.brand = brand;
+            }
+
+            //Guardar cambios básicos
+            const updateShoe = await shoeRepo.save(shoeFound);
+
+
+
+            //Asociar nuevas categorias
+            if (categories && categories.length > 0) {
+                //Limpiar las categorias antiguas
+                await categoryShoeRepo.delete({ shoe: { id } });
+
+                const existingCategories = await categoryRepo.findByIds(categories);
+                if (existingCategories.length !== categories.length) {
+                    throw new NotFoundError('Una o más categorias no existen!');
+                }
+
+                const categoryShoeUpdate = existingCategories.map(category =>
+                    categoryShoeRepo.create({
+                        shoe: updateShoe,
+                        category: category
+                    })
+                );
+
+                await categoryShoeRepo.save(categoryShoeUpdate);
+            }
+
+
+
+            //Asociar nuevas tallas con stock
+            let sizesJson = JSON.parse(sizes);
+            if (sizesJson && sizesJson.length > 0) {
+                //Limpiar tallas antiguas
+                await sizeShoeRepo.delete({ shoe: { id } });
+
+                const sizeIds = sizesJson.map((el: any) => el.id);
+                const existingSizes = await sizeRepo.findByIds(sizeIds);
+                if (existingSizes.length !== sizesJson.length) {
+                    throw new NotFoundError('Una o más tallas no existen!');
+                }
+                const sizesShoesUpdate = existingSizes.map(size => {
+                    const inputSize = sizesJson.find((s: any) => s.id === size.id);
+                    return sizeShoeRepo.create({
+                        shoe: updateShoe,
+                        size: size,
+                        stock: inputSize?.stock || 0
+                    });
+                }
+                );
+                await sizeShoeRepo.save(sizesShoesUpdate);
+
+            }
+
+            //Guardar imagenes
+            if (files && files.length > 0) {
+                //Eliminar los archivos del sistema de archivos
+                if (shoeFound.images && shoeFound.images.length > 0) {
+                    for (const image of shoeFound.images) {
+                        const imagePath = path.join(process.cwd(), 'src', 'uploads', path.basename(image.url));
+                        console.log(imagePath)
+                        try {
+                            if (fs.existsSync(imagePath)) {
+                                fs.unlinkSync(imagePath);//Elimina el archivo fisico
+                            }
+                        } catch (error) {
+                            console.error(`Error eliminando archivo: ${imagePath}`, error);
+                        }
+                    }
+                }
+                // 🧹 Eliminar imágenes antiguas
+                await imageRepo.delete({ shoe: { id } });
+                arrayImgsPrincipal=Array.isArray(arrayImgsPrincipal) ? arrayImgsPrincipal : [arrayImgsPrincipal];
+                const arrayImages = files.map((file: any, index: number) => ({
+                    url: `/uploads/${file.filename}`,
+                    is_main: arrayImgsPrincipal[index] === "true"
+                }));
+
+                const imageEntities = arrayImages.map((el: any) =>
+                    imageRepo.create({
+                        url: el.url,
+                        is_main: el.is_main,
+                        shoe: updateShoe
+                    })
+                );
+
+                await imageRepo.save(imageEntities);
+            }
+
+            return updateShoe;
+        });
+    }
+
     async deleteShoe(id: number) {
         const shoe = await this.shoeRepository.findOne({
             where: { id },
@@ -140,11 +262,11 @@ export class ShoeService {
                 const imagePath = path.join(process.cwd(), 'src', 'uploads', path.basename(image.url));
                 console.log(imagePath)
                 try {
-                  if(fs.existsSync(imagePath)){
-                    fs.unlinkSync(imagePath);//Elimina el archivo fisico
-                  }
+                    if (fs.existsSync(imagePath)) {
+                        fs.unlinkSync(imagePath);//Elimina el archivo fisico
+                    }
                 } catch (error) {
-                   console.error(`Error eliminando archivo: ${imagePath}`,error);
+                    console.error(`Error eliminando archivo: ${imagePath}`, error);
                 }
             }
         }

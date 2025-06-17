@@ -23,7 +23,7 @@ return this.http.get(this.apiUrl+"shoes/"+id);
     return this.http.post(this.apiUrl+"shoes",shoe);
   }
 
-  updateShoe(id:number,shoe:any):Observable<any>{
+  updateShoe(id:any,shoe:FormData):Observable<any>{
     return this.http.put(this.apiUrl+"shoes/"+id,shoe);
   }
 
