@@ -103,7 +103,8 @@
              <div *ngIf="imagesFound.length > 0">
               <div *ngFor="let img of imagesFound">
                 <img [src]="'http://127.0.0.1:5000'+img.url" width="150" [style.border]="img.is_main ? '3px solid green' : 'none'" />
-                
+                <button type="button" class="btn btn-primary" (click)="principalImageFound(img.id)">Marcar Principal</button>
+                <button type="button" class="btn btn-danger" (click)="deleteImage(img.id)">Eliminar</button>
               </div>
             </div>
 

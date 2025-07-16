@@ -24,7 +24,7 @@ export class EditShoeComponent implements OnInit {
   sizes: any;
   selectedSizes: { id: number, stock: number }[] = [];
 
-  imagesFound:any[]=[];
+  imagesFound: any[] = [];
   previewImages: any[] = [];
 
   constructor(
@@ -52,9 +52,10 @@ export class EditShoeComponent implements OnInit {
         this.brand_id = data.brand.id;
         this.categoriesSelect = Array.isArray(data.categoryShoes) ? data.categoryShoes.map((el: any) => el.category.id) : [];
         data.shoeSizes.forEach((el: any) => this.selectedSizes.push({ id: el.size.id, stock: el.stock }));
-        this.imagesFound=data.images;
+        this.imagesFound = data.images;
 
         console.log(data);
+
       },
       error: (error) => {
         console.log(error);
@@ -153,7 +154,25 @@ export class EditShoeComponent implements OnInit {
     this.previewImages.forEach((img: any, i: number) => {
       img.is_main = i === index;
     });
+
+    this.imagesFound.forEach(el=>el.is_main=false);
     console.log(this.previewImages)
+  }
+
+  principalImageFound(id: number) {
+    this.imagesFound.forEach(el => {
+      if (el.id === id) {
+        el.is_main = true;
+      } else {
+        el.is_main = false;
+      }
+
+    });
+
+    this.previewImages.forEach((img: any) => {
+      img.is_main =false;
+    });
+    
   }
 
   updateShoe() {
@@ -178,7 +197,15 @@ export class EditShoeComponent implements OnInit {
     this.previewImages.forEach((image) => {
       formData.append('arrayImages', image.file);
       formData.append('arrayImgsPrincipal', image.is_main);
+
     });
+
+    if (this.imagesFound.length > 0) {
+      
+        formData.append('idImages', JSON.stringify(this.imagesFound));
+     
+
+    }
 
 
     this._shoeService.updateShoe(this.id, formData).subscribe({
@@ -190,6 +217,10 @@ export class EditShoeComponent implements OnInit {
         console.log(error);
       }
     })
+  }
+
+  deleteImage(idImage: number) {
+    this.imagesFound = this.imagesFound.filter(el => el.id !== idImage);
   }
 
   resetForm() {

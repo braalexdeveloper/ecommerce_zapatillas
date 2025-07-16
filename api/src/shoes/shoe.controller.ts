@@ -11,7 +11,14 @@ export class ShoeController {
 
     async getShoes(req: Request, res: Response) {
         try {
-            const shoes = await this.shoeService.getShoes();
+            const page=parseInt(req.query.page as string) || 1;
+            const limit=parseInt(req.query.limit as string) || 10;
+            const orderPrice = (req.query.orderPrice as string) || 'asc';
+            const brandsIds=(req.query.brands as string)?.split(",").map(id=>Number(id));
+            const categories=req.query.categories ? JSON.parse(req.query.categories as string) : null;
+          console.log('categoriasss',categories)
+            const shoes = await this.shoeService.getShoes({page,limit,orderPrice,brandsIds,categories});
+
             res.status(200).json(shoes);
         } catch (error) {
             res.status(500).json({ error: error instanceof Error ? error.message : "Error al obtener zapatillas!" })

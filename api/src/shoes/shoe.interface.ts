@@ -7,4 +7,5 @@ export interface ShoeInterface{
     categories:any;
     sizes:any;
     arrayImgsPrincipal:any;
+    idImages:any;
 }

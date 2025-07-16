@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { Shoe } from "./shoe.entity";
 import { AppDataSource } from "../config/database";
 import { NotFoundError } from "../errors/NotFoundError";
@@ -12,6 +12,15 @@ import { ShoeSize } from "../relations/shoe-size.entity";
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { ShoeDto } from "./ShoeDto";
+
+interface GetShoesOptions {
+    page: number;
+    limit: number;
+    orderPrice: string;
+    brandsIds: number[];
+    categories: string[] | null;
+}
 
 export class ShoeService {
     private shoeRepository: Repository<Shoe>;
@@ -22,19 +31,71 @@ export class ShoeService {
 
     }
 
-    async getShoes() {
-        return await this.shoeRepository.find({
-            relations: ["brand", "images"]
-        });
+
+    async getShoes(options: GetShoesOptions) {
+
+        const { page, limit, orderPrice, brandsIds, categories } = options;
+
+        const query = this.shoeRepository.createQueryBuilder("shoe")
+            .leftJoinAndSelect("shoe.brand", "brand")
+            .leftJoinAndSelect("shoe.images", "images")
+            .leftJoinAndSelect("shoe.categoryShoes", "categoryShoe")
+            .leftJoinAndSelect("categoryShoe.category", "category");
+
+
+        if (brandsIds && brandsIds.length > 0) {
+            query.andWhere("brand.id IN (:...brandsIds)", { brandsIds });
+        }
+
+        if (categories && categories.length > 0) {
+            query.andWhere("category.name IN (:...categories)", { categories });
+        }
+
+        query.orderBy("shoe.price", orderPrice?.toUpperCase() === "ASC" ? "ASC" : "DESC");
+
+        const [shoes, total] = await query
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount();
+
+
+        return {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            items: shoes
+        };
     }
 
-    async getShoe(id: number) {
+    async getShoe(id: number): Promise<ShoeDto> {
         const shoeFound = await this.shoeRepository.findOne({
             where: { id },
             relations: ["brand", "categoryShoes.category", "shoeSizes.size", "images"]
         });
         if (!shoeFound) throw new NotFoundError("Zapatilla no encontrada");
-        return shoeFound;
+
+        const shoe: ShoeDto = {
+            id: shoeFound.id,
+            name: shoeFound.name,
+            description: shoeFound.description,
+            price: shoeFound.price,
+            brand: shoeFound.brand.name,
+            categories: shoeFound.categoryShoes.map((c: any) => {
+                return {
+                    id: c.category.id,
+                    name: c.category.name
+                }
+            }),
+            sizes: shoeFound.shoeSizes.map((s: any) => {
+                return {
+                    size: s.size.size_value,
+                    stock: s.stock
+                }
+            }),
+            images: shoeFound.images ? shoeFound.images : null,
+        };
+
+        return shoe;
     }
 
 
@@ -101,11 +162,13 @@ export class ShoeService {
                 await sizeShoeRepo.save(sizeShoes);
             }
 
+
             //images
+            let principal = Array.isArray(arrayImgsPrincipal) ? arrayImgsPrincipal : [arrayImgsPrincipal];
             const arrayImages = files.map((file: any, index: number) => {
                 return {
                     url: `/uploads/${file.filename}`,
-                    is_main: arrayImgsPrincipal[index] === "true"
+                    is_main: principal[index] === "true"
                 }
             });
 
@@ -127,7 +190,7 @@ export class ShoeService {
     }
 
     async updateShoe(id: number, shoe: ShoeInterface, files: any) {
-        let { categories, sizes, brand_id, arrayImgsPrincipal, ...shoeData } = shoe;
+        let { categories, sizes, brand_id, arrayImgsPrincipal, idImages, ...shoeData } = shoe;
 
         return await AppDataSource.transaction(async (manager) => {
             const shoeRepo = manager.getRepository(Shoe);
@@ -207,25 +270,46 @@ export class ShoeService {
 
             }
 
-            //Guardar imagenes
-            if (files && files.length > 0) {
-                //Eliminar los archivos del sistema de archivos
-                if (shoeFound.images && shoeFound.images.length > 0) {
-                    for (const image of shoeFound.images) {
+            //Eliminar los archivos del sistema de archivos
+            const imagesParse = JSON.parse(idImages || '[]');
+            const safeIdImages = Array.isArray(imagesParse) ? imagesParse.map((el: any) => el.id) : [];
+            console.log('imagenes', imagesParse)
+
+            if (shoeFound.images && shoeFound.images.length > 0) {
+                for (const image of shoeFound.images) {
+                    if (!safeIdImages.includes(image.id)) {
                         const imagePath = path.join(process.cwd(), 'src', 'uploads', path.basename(image.url));
                         console.log(imagePath)
                         try {
                             if (fs.existsSync(imagePath)) {
                                 fs.unlinkSync(imagePath);//Elimina el archivo fisico
                             }
+                            // 🧹 Eliminar imágenes antiguas
+                            await imageRepo.delete(image.id);
                         } catch (error) {
                             console.error(`Error eliminando archivo: ${imagePath}`, error);
                         }
                     }
+
+
                 }
-                // 🧹 Eliminar imágenes antiguas
-                await imageRepo.delete({ shoe: { id } });
-                arrayImgsPrincipal=Array.isArray(arrayImgsPrincipal) ? arrayImgsPrincipal : [arrayImgsPrincipal];
+
+                if (imagesParse.length > 0) {
+                    for (const element of imagesParse) {
+                        const image = await imageRepo.findOneBy({ id: element.id });
+                        if (!image) throw new NotFoundError('Imagen no encontrada para cambiar la principal');
+                        image.is_main = element.is_main === true;
+                        await imageRepo.save(image);
+                    }
+                }
+
+
+            }
+            //Guardar imagenes
+            if (files && files.length > 0) {
+
+
+                arrayImgsPrincipal = Array.isArray(arrayImgsPrincipal) ? arrayImgsPrincipal : [arrayImgsPrincipal];
                 const arrayImages = files.map((file: any, index: number) => ({
                     url: `/uploads/${file.filename}`,
                     is_main: arrayImgsPrincipal[index] === "true"

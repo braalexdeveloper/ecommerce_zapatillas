@@ -1,0 +1,23 @@
+/* Breadcrumb */
+        .breadcrumb {
+            padding: 1rem 2rem;
+            background-color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--purple);
+        }
+
+        .breadcrumb span {
+            color: var(--medium-gray);
+            margin: 0 0.5rem;
+        }
+
+        
