@@ -23,7 +23,7 @@ export class ListShoesComponent implements OnInit {
     this._shoeService.getShoes().subscribe({
       next: (data) => {
         console.log(data)
-        this.shoes = data;
+        this.shoes = data.items;
       }
     })
   }

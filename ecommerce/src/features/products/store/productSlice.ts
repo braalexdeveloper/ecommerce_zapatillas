@@ -1,25 +1,27 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import { fetchProduct, fetchProducts } from "../services/ProductService";
 
-import { Product } from "../types/Product";
+import type { Product } from "../types/Product";
+import type { ProductList } from "../types/ProductsList";
+import type { Options } from "../types/Options";
 
 interface ProductState{
-    products:Product[];
+    productList:ProductList | null;
     product:Product | null;
     loading:boolean;
     error:string | null;
 }
 
 const initialState:ProductState={
-    products:[],
+    productList:null,
     product:null,
     loading:false,
     error:null
 }
 
 //Thunk para cargar productos
-export const getProducts=createAsyncThunk("products/fetch",async()=>{
-    return await fetchProducts();
+export const getProducts=createAsyncThunk("products/fetch",async(parametros?:Options)=>{
+    return await fetchProducts(parametros);
 });
 
 //Thunk para cargar producto
@@ -38,7 +40,7 @@ const productSlice=createSlice({
             state.error=null;
         })
         .addCase(getProducts.fulfilled,(state,action)=>{
-            state.products=action.payload;
+            state.productList=action.payload;
             state.loading=false;
         })
         .addCase(getProducts.rejected, (state, action) => {

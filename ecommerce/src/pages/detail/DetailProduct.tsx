@@ -2,7 +2,7 @@ import styles from './DetailProduct.module.css';
 import './Detail.css';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, type RootState } from '../../store';
+import { type AppDispatch, type RootState } from '../../store';
 import { useEffect } from 'react';
 import { getProductById } from '../../features/products/store/productSlice';
 

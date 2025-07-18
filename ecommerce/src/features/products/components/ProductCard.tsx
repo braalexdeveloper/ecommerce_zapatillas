@@ -17,6 +17,7 @@ export const ProductCard = ({ product }: Props) => {
                 <div className="product-info">
                     <h1 className="product-title"><Link to={'/product/' + product.id} >{product.name}</Link></h1>
                     <p className="product-category">{product.brand.name}</p>
+                    <p className="product-category">{product.categoryShoes[0].category.name}</p>
                     <div className="product-price">${product.price} <span className="old-price">$179.99</span></div>
                     <button className="add-to-cart">Añadir al carrito</button>
                 </div>

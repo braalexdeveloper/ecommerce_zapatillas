@@ -7,7 +7,7 @@ import { getProducts } from "../store/productSlice"
 
 export const Products = () => {
   const dispatch=useDispatch<AppDispatch>();
-  const {products,loading,error}=useSelector((state:RootState)=>state.products);
+  const {productList,loading,error}=useSelector((state:RootState)=>state.products);
 
    useEffect(() => {
     dispatch(getProducts());
@@ -19,7 +19,7 @@ export const Products = () => {
   return (
     <>
       <div className="products-grid">
-        {products.map(p=>(
+        {productList?.items.map(p=>(
              <ProductCard product={p}/>
         ))}
         

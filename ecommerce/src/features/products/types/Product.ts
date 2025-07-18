@@ -4,7 +4,8 @@ export interface Product{
     description:string;
     price:number;
     brand:any;
-    categories:any;
-    sizes:any;
+    categories?:any;
+    categoryShoes?:any;
+    sizes?:any;
     images:any[];
 }
