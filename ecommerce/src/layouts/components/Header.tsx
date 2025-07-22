@@ -20,7 +20,7 @@ export const Header=()=>{
             <div className="icons">
                 <i className="fas fa-search"></i>
                 <i className="fas fa-user"></i>
-                <i className="fas fa-shopping-cart"></i>
+                <Link to="/cart"><i className="fas fa-shopping-cart"></i></Link>
             </div>
         </nav>
     </header>

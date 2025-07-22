@@ -1,11 +1,20 @@
 import { Link } from "react-router-dom"
 import type { Product } from "../types/Product"
+import { addToCart } from "../../cart/services/CartService"
 
 interface Props {
     product: Product
 }
 
+
 export const ProductCard = ({ product }: Props) => {
+
+    const addCart = (item: Product) => {
+
+        addToCart(item);
+        
+
+    }
     return (
         <>
 
@@ -19,7 +28,7 @@ export const ProductCard = ({ product }: Props) => {
                     <p className="product-category">{product.brand.name}</p>
                     <p className="product-category">{product.categoryShoes[0].category.name}</p>
                     <div className="product-price">${product.price} <span className="old-price">$179.99</span></div>
-                    <button className="add-to-cart">Añadir al carrito</button>
+                    <button className="add-to-cart" onClick={() => addCart(product)}>Añadir al carrito</button>
                 </div>
             </div>
         </>

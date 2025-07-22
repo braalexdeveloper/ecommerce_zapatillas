@@ -3,6 +3,7 @@ import Home from "./pages/home/Home"
 import Shop from "./pages/shop/Shop"
 import MainLayout from "./layouts/MainLayout"
 import { DetailProduct } from "./pages/detail/DetailProduct"
+import { Cart } from "./pages/cart/Cart"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="shop" element={<Shop/>}/>
             <Route path="product/:id" element={<DetailProduct/>}/>
+            <Route path="cart" element={<Cart/>}/>
         </Route>
       </Routes>
       </Router>

@@ -10,13 +10,15 @@ interface ProductState{
     product:Product | null;
     loading:boolean;
     error:string | null;
+    filters:Options;
 }
 
 const initialState:ProductState={
     productList:null,
     product:null,
     loading:false,
-    error:null
+    error:null,
+    filters:{} as Options,
 }
 
 //Thunk para cargar productos
@@ -32,7 +34,11 @@ export const getProductById=createAsyncThunk("products/fetchById",async(id:numbe
 const productSlice=createSlice({
     name:'products',
     initialState,
-    reducers:{},
+    reducers:{
+        setFilters:(state,action)=>{
+            state.filters={...state.filters,...action.payload};
+        }
+    },
     extraReducers(builder){
         builder
         .addCase(getProducts.pending,(state)=>{
@@ -66,3 +72,4 @@ state.error=action.error.message ?? "Error al cargar producto";
 })
 
 export default productSlice.reducer;
+export const { setFilters } = productSlice.actions;

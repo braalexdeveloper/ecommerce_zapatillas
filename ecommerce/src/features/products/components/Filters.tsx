@@ -1,14 +1,17 @@
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, type RootState } from "../../../store"
+import { type AppDispatch, type RootState } from "../../../store"
 import { useEffect, useState } from "react";
 import { getBrands } from "../../brands/store/brandSlice";
-import { getProducts } from "../store/productSlice";
+import { setFilters,getProducts } from "../store/productSlice";
 import { getCategories } from "../../categories/store/CategorySlice";
 
 
 export const Filters = () => {
 
     const dispatch = useDispatch<AppDispatch>();
+
+    const filters=useSelector((state:RootState)=>state.products.filters);
+
     const [brandsId,setBrandsId]=useState<string[]>([]);
     const [categoriesSelected,setCategoriesSelected]=useState<string[]>([]);
 
@@ -20,10 +23,12 @@ export const Filters = () => {
       const id=e.target.value;
       if(e.target.checked){
         setBrandsId(prev=>[...prev,id])
+
       }else{
         setBrandsId(prev => prev.filter(el => el !== id));
       }
       
+    
       
     }
 
@@ -33,15 +38,29 @@ export const Filters = () => {
      }else{
         setCategoriesSelected(prev=>prev.filter(el=>el!==e.target.value));
      }
+     
     };
 
     useEffect(() => {
-        dispatch(getBrands());
-        dispatch(getCategories());
+       const newFilters={
+...filters,
+brands:brandsId.join(","),
+categories:categoriesSelected
+       }
 
-        dispatch(getProducts({brands:brandsId.join(","),categories:categoriesSelected}));
-        console.log(categoriesSelected)
+        dispatch(setFilters(newFilters));
+       
+ 
+        dispatch(getProducts(newFilters));
+        console.log(filters)
+        
+        
     }, [brandsId,categoriesSelected])
+
+    useEffect(()=>{
+ dispatch(getBrands());
+        dispatch(getCategories());
+    },[])
 
     if(loading) <p>Cargando marcas...</p>
     if(loadingCategory) <p>Cargando categorias...</p>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 
 
 export const ProductList = () => {
-    const { products, error, loading } = useSelector((state: RootState) => state.products);
+    const { productList, error, loading } = useSelector((state: RootState) => state.products);
 
     if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -18,7 +18,7 @@ export const ProductList = () => {
                 <div className="products-grid">
 
                     {
-                        products.map(p => (
+                        productList?.items.map(p => (
                             <ProductCard product={p} />
                         ))
                     }

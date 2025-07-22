@@ -1,0 +1,259 @@
+.cartContainer {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.cartTitle {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: var(--dark-gray);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.cartTitle::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background-color: var(--fuchsia);
+}
+
+.cartContent {
+  display: flex;
+  gap: 2rem;
+}
+
+.cartItems {
+  flex: 2;
+  overflow-x: auto;
+}
+
+.cartTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.cartTable th {
+  text-align: left;
+  padding: 1rem;
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  font-weight: 600;
+}
+
+.cartTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--medium-gray);
+  vertical-align: middle;
+}
+
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.productImageCart {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.productImageCart img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productInfo h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  color: var(--dark-gray);
+}
+
+.productInfo p {
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantityButton {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--medium-gray);
+  background-color: var(--white);
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.quantityButton:hover {
+  background-color: var(--light-gray);
+}
+
+.quantityInput {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid var(--medium-gray);
+  border-radius: 5px;
+}
+
+.removeItem {
+  color: var(--medium-gray);
+  cursor: pointer;
+  transition: color 0.3s;
+  font-size: 1.2rem;
+}
+
+.removeItem:hover {
+  color: var(--fuchsia);
+}
+
+.price {
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  color: var(--medium-gray);
+  font-size: 0.9rem;
+}
+
+.cartSummary {
+  flex: 1;
+  background-color: var(--light-gray);
+  padding: 1.5rem;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.summaryTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--dark-gray);
+  border-bottom: 1px solid var(--medium-gray);
+  padding-bottom: 0.5rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.summaryLabel {
+  color: var(--dark-gray);
+}
+
+.summaryValue {
+  font-weight: 600;
+}
+
+.totalRow {
+  border-top: 1px solid var(--medium-gray);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.totalLabel {
+  font-weight: bold;
+}
+
+.totalPrice {
+  font-weight: bold;
+  color: var(--purple);
+  font-size: 1.3rem;
+}
+
+.checkoutButton {
+  width: 100%;
+  background-color: var(--fuchsia);
+  color: var(--white);
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.checkoutButton:hover {
+  background-color: var(--purple);
+}
+
+.continueShopping {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--purple);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.continueShopping:hover {
+  color: var(--fuchsia);
+}
+
+.emptyCart {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.emptyCartIcon {
+  font-size: 5rem;
+  color: var(--medium-gray);
+  margin-bottom: 1.5rem;
+}
+
+.emptyCart h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--dark-gray);
+}
+
+.emptyCart p {
+  color: var(--medium-gray);
+  margin-bottom: 1.5rem;
+}
+
+.emptyCartButton {
+  background-color: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.emptyCartButton:hover {
+  background-color: var(--purple);
+}
+ 
