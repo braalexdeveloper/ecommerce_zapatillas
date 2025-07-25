@@ -2,7 +2,8 @@
 import type { Product } from "../../products/types/Product";
 
 export interface ProductCart extends Product{
-    quantity?:number
+    quantity?:number;
+    subtotal?:number;
 }
 
 const STORAGE_KEY = "carrito";
@@ -21,8 +22,10 @@ export const addToCart = (item: ProductCart) => {
   const index=cart.findIndex(product=>product.id===item.id);
   if(index!==-1){
     cart[index].quantity=(cart[index].quantity || 1)+1;
+    cart[index].subtotal=cart[index].quantity*cart[index].price;
   }else{
-    cart.push({...item,quantity:1});
+    cart.push({...item,quantity:1,subtotal:item.price});
+    
   }
   
   saveCart(cart);

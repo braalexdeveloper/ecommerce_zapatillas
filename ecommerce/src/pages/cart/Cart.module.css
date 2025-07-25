@@ -198,6 +198,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  text-decoration: none;
 }
 
 .checkoutButton:hover {

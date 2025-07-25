@@ -1,49 +1,62 @@
 import { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
-import { getCart, removeFromCart, type ProductCart } from "../../features/cart/services/CartService";
+import { getCart, removeFromCart, saveCart, type ProductCart } from "../../features/cart/services/CartService";
+import { Link } from "react-router-dom";
 
 
 
 
 export const Cart = () => {
 
-    const [carrito,setCarrito]=useState<ProductCart[]>(getCart());
-    
-    
-    
-    console.log("carga",carrito)
+    const [carrito, setCarrito] = useState<ProductCart[]>(getCart());
+    const [payData, setPayData] = useState({
+        subtotal: 0,
+        envio: 0,
+        descuento: 0,
+        total: 0,
+    });
+
+
+    console.log("carga", carrito)
 
     const deleteItem = (id: number) => {
         setCarrito(removeFromCart(id));
-        console.log("delete",carrito)
+        console.log("delete", carrito)
     }
 
-    const changeCount=(value:number,id:number)=>{
-      const found=carrito.find(el=>Number(el.id)===id);
-      if(found){
-        
-        found.quantity=found.quantity ? found.quantity+value: 1;
-        let newCart:ProductCart[]=carrito.map((el:ProductCart)=>{
-            if(el.id===found.id){
-               return found;
-            }
-            return el;
-        });
-        
-           setCarrito(newCart);
-        
-        
-        
-      }
+    const changeCount = (value: number, id: number) => {
+        const found = carrito.find(el => Number(el.id) === id);
+        if (found) {
 
-      
+            found.quantity = found.quantity ? found.quantity + value : 1;
+            found.subtotal = found.quantity * found.price;
+            let newCart: ProductCart[] = carrito.map((el: ProductCart) => {
+                if (el.id === found.id) {
+                    return found;
+                }
+                return el;
+            });
+
+            setCarrito(newCart);
+
+            saveCart(newCart);
+
+        }
+
+
     }
 
 
-    useEffect(()=>{
-console.log("useeffect",carrito)
+    useEffect(() => {
+        console.log("useeffect", carrito)
+        const subTotal = carrito.reduce((suma, el) => suma + Number(el.subtotal || 0), 0);
 
-    },[carrito])
+        setPayData({
+            ...payData,
+            subtotal: subTotal,
+            total: subTotal + payData.envio - payData.descuento,
+        })
+    }, [carrito])
     return (
         <div className={styles.cartContainer}>
             <h1 className={styles.cartTitle}>Tu Carrito de Compras</h1>
@@ -84,17 +97,17 @@ console.log("useeffect",carrito)
                                         </td>
                                         <td>
                                             <div className={styles.quantityControl}>
-                                                <button className={styles.quantityButton} onClick={()=>changeCount(-1,el.id)}>-</button>
+                                                <button className={styles.quantityButton} onClick={() => changeCount(-1, el.id)}>-</button>
                                                 <input
                                                     type="number"
                                                     className={styles.quantityInput}
                                                     value={el.quantity}
-                                                    
+
                                                 />
-                                                <button className={styles.quantityButton} onClick={()=>changeCount(1,el.id)}>+</button>
+                                                <button className={styles.quantityButton} onClick={() => changeCount(1, el.id)}>+</button>
                                             </div>
                                         </td>
-                                        <td className={styles.price}>$149.99</td>
+                                        <td className={styles.price}>${el.subtotal}</td>
                                         <td>
                                             <i className={styles.removeItem} onClick={() => deleteItem(el.id)}>🗑️</i>
                                         </td>
@@ -115,27 +128,27 @@ console.log("useeffect",carrito)
 
                     <div className={styles.summaryRow}>
                         <span className={styles.summaryLabel}>Subtotal</span>
-                        <span className={styles.summaryValue}>$469.97</span>
+                        <span className={styles.summaryValue}>${payData.subtotal}</span>
                     </div>
 
                     <div className={styles.summaryRow}>
                         <span className={styles.summaryLabel}>Envío</span>
-                        <span className={styles.summaryValue}>$9.99</span>
+                        <span className={styles.summaryValue}>${payData.envio}</span>
                     </div>
 
                     <div className={styles.summaryRow}>
                         <span className={styles.summaryLabel}>Descuento</span>
-                        <span className={styles.summaryValue}>-$30.00</span>
+                        <span className={styles.summaryValue}>-${payData.descuento}</span>
                     </div>
 
                     <div className={`${styles.summaryRow} ${styles.totalRow}`}>
                         <span className={styles.totalLabel}>Total</span>
-                        <span className={styles.totalPrice}>$449.96</span>
+                        <span className={styles.totalPrice}>${payData.total}</span>
                     </div>
 
-                    <button className={styles.checkoutButton}>
+                    <Link to={'/checkout'} className={styles.checkoutButton}>
                         💳 Proceder al pago
-                    </button>
+                    </Link>
                 </div>
             </div>
 

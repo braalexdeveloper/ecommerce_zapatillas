@@ -31,6 +31,19 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .badge{
+            text-align: center;
+            color:#f5f5f5;
+            background-color: #6a0dad;
+            border-radius: 20px;
+            width: 20px;
+            height: 20px;
+            display:block;
+            font-size: 12px;
+            position: absolute;
+            top: 7 px;
+            right: 12px;
+        }
         .navbar {
             display: flex;
             justify-content: space-between;
