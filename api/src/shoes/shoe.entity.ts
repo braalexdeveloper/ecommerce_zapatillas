@@ -4,6 +4,7 @@ import { CategoryShoe } from "../relations/category-shoe.entity";
 import { ShoeSize } from "../relations/shoe-size.entity";
 import { Brand } from "../brands/brand.entity";
 import { Image } from "../images/image.entity";
+import { OrderShoe } from "../relations/order-shoe.entity";
 
 @Entity()
 export class Shoe{
@@ -35,4 +36,7 @@ export class Shoe{
 
     @OneToMany(()=>Image,image=>image.shoe, { cascade: true , onDelete: "CASCADE"})
     images?:Image[]
+
+    @OneToMany(()=>OrderShoe,order_shoes=>order_shoes.shoe)
+    order_shoes!:OrderShoe;
 }

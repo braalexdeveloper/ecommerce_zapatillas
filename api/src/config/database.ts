@@ -8,6 +8,11 @@ import { Image } from "../images/image.entity";
 import { Shoe } from "../shoes/shoe.entity";
 import { ShoeSize } from "../relations/shoe-size.entity";
 import { CategoryShoe } from "../relations/category-shoe.entity";
+import { Client } from "../clients/client.entity";
+import { Order } from "../orders/order.entity";
+import { OrderShoe } from "../relations/order-shoe.entity";
+import { Role } from "../roles/role.entity";
+import { User } from "../users/user.entity";
 
 dotenv.config();
 
@@ -20,6 +25,6 @@ export const AppDataSource=new DataSource({
   database: process.env.DB_NAME || 'ecommercenodets',
   synchronize: true, // ⚠️ Solo en desarrollo (cambiar a false en producción)
   logging: true,
-  entities: [Category,Brand,Size,Image,Shoe,ShoeSize,CategoryShoe], // Directorio de modelos
+  entities: [Category,Brand,Size,Image,Shoe,ShoeSize,CategoryShoe,Role,User,Client,Order,OrderShoe], // Directorio de modelos
   migrations: [],
 })
