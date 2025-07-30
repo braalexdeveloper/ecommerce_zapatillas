@@ -7,8 +7,11 @@ import categoryRoutes from './categories/category.route';
 import brandRoutes from './brands/brand.route';
 import shoeRoutes from './shoes/shoe.route';
 import sizeRoutes from './sizes/size.route';
+import roleRoutes from './roles/role.routes';
+import userRoutes from './users/user.routes';
 import clientRoutes from './clients/client.routes';
 import orderRoutes from './orders/order.routes';
+import mercadoPagoRoutes from './mercadoPago/mercadoPago.routes';
 import path from "path";
 
 dotenv.config();
@@ -22,8 +25,11 @@ app.use('/api',categoryRoutes);
 app.use('/api',brandRoutes);
 app.use('/api',shoeRoutes);
 app.use('/api',sizeRoutes);
+app.use('/api',roleRoutes);
+app.use('/api',userRoutes);
 app.use('/api',clientRoutes);
 app.use('/api',orderRoutes);
+app.use('/api',mercadoPagoRoutes);
 
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
