@@ -1,6 +1,82 @@
+import { useEffect, useState } from 'react';
+import { getCart, type ProductCart } from '../../features/cart/services/CartService'
 import './checkout.css'
+import { type Order } from '../../features/checkout/types/Order';
+import { type ClientI } from '../../features/clients/types/Client';
+import { createClient } from '../../features/clients/service/ClientService';
+import { createOrder } from '../../features/checkout/service/OrderService';
 
 export const Checkout = () => {
+    const [carrito, setCarrito] = useState<ProductCart[]>(getCart());
+
+    const [order, setOrder] = useState<Order>({
+        address: '',
+        total: 0,
+        client_id: 0,
+        order_shoes: carrito.map((el) => {
+            return {
+                shoe_id: Number(el.id),
+                quantity: el.quantity ?? 0,
+                subtotal: el.subtotal ?? 0
+            }
+        })
+    });
+
+    const handleOrder = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setOrder({
+            ...order,
+            [name]: value
+        });
+    }
+
+    const [client, setClient] = useState<ClientI>({
+        name: '',
+        lastName: '',
+        dni: '',
+        phone: '',
+        email: ''
+    });
+
+    const handleClient = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setClient({
+            ...client,
+            [name]: value
+        });
+
+
+    }
+
+    const payment = async () => {
+        const clientCreated = await createClient(client);
+
+        if (clientCreated.client) {
+            const newOrder = {
+                ...order,
+                client_id: clientCreated.client.id
+            };
+
+            const createdOrder = await createOrder(newOrder);
+            console.log(createdOrder)
+            if (createdOrder.url) {
+                window.location.href = createdOrder.url.sandbox_url;
+
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        let newTotal = carrito.reduce((sum, el) => sum + (el.subtotal ?? 0), 0);
+        setOrder({
+            ...order,
+            total: newTotal
+        })
+        console.log(order)
+        console.log(client);
+    }, [carrito]);
+
     return (
         <>
             <div className="checkout-page">
@@ -30,85 +106,33 @@ export const Checkout = () => {
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label>Nombre*</label>
-                                        <input type="text" required />
+                                        <input type="text" name='name' value={client?.name} onChange={handleClient} required />
                                     </div>
                                     <div className="form-group">
                                         <label>Apellido*</label>
-                                        <input type="text" required />
+                                        <input type="text" name='lastName' value={client?.lastName} onChange={handleClient} required />
                                     </div>
                                 </div>
 
                                 <div className="form-group">
                                     <label>Dirección*</label>
-                                    <input type="text" required />
+                                    <input type="text" value={order?.address} name='address' onChange={handleOrder} required />
                                 </div>
 
-                                <div className="form-group">
-                                    <label>Departamento (opcional)</label>
-                                    <input type="text" />
-                                </div>
 
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label>Ciudad*</label>
-                                        <input type="text" required />
+                                        <label>DNI*</label>
+                                        <input type="text" name='dni' value={client?.dni} onChange={handleClient} required />
                                     </div>
                                     <div className="form-group">
-                                        <label>Región*</label>
-                                        <select required>
-                                            <option value="">Seleccionar...</option>
-
-                                        </select>
+                                        <label>Teléfono*</label>
+                                        <input type="tel" name='phone' value={client?.phone} onChange={handleClient} required />
                                     </div>
                                 </div>
-
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Código Postal*</label>
-                                        <input type="text" required />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>País*</label>
-                                        <select required>
-                                            <option value="CL">Chile</option>
-                                            <option value="MX">México</option>
-                                            <option value="CO">Colombia</option>
-                                            <option value="AR">Argentina</option>
-                                            <option value="ES">España</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Teléfono*</label>
-                                    <input type="tel" required />
-                                </div>
-
                                 <div className="form-group">
                                     <label>Correo electrónico*</label>
-                                    <input type="email" required />
-                                </div>
-
-                                <h2 className="section-title">Método de Envío</h2>
-
-                                <div className="shipping-methods">
-                                    <label className="shipping-method">
-                                        <input type="radio" name="shipping" checked />
-                                        <div className="method-content">
-                                            <div className="method-name">Envío Estándar</div>
-                                            <div className="method-details">3-5 días hábiles</div>
-                                        </div>
-                                        <div className="method-price">$9.99</div>
-                                    </label>
-
-                                    <label className="shipping-method">
-                                        <input type="radio" name="shipping" />
-                                        <div className="method-content">
-                                            <div className="method-name">Envío Express</div>
-                                            <div className="method-details">1-2 días hábiles</div>
-                                        </div>
-                                        <div className="method-price">$19.99</div>
-                                    </label>
+                                    <input type="email" name='email' value={client?.email} onChange={handleClient} required />
                                 </div>
 
                                 <h2 className="section-title">Método de Pago</h2>
@@ -146,7 +170,7 @@ export const Checkout = () => {
 
                                 <div className="form-footer">
                                     <a href="cart.html" className="back-link">← Volver al carrito</a>
-                                    <button type="submit" className="submit-btn">Completar Pedido</button>
+                                    <button type="button" className="submit-btn" onClick={payment}>Completar Pedido</button>
                                 </div>
                             </form>
                         </div>
@@ -156,50 +180,41 @@ export const Checkout = () => {
                             <h2 className="section-title">Tu Pedido</h2>
 
                             <div className="order-items">
-                                <div className="order-item">
-                                    <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28" alt="Zapatillas" />
-                                    <div className="item-details">
-                                        <h3>Nike Air Max 270</h3>
-                                        <p>Talla: 38 · Color: Negro/Rojo</p>
-                                        <div className="item-price">$149.99</div>
+                                {carrito.map((el) => (
+                                    <div className="order-item" key={el.id}>
+                                        <img src={'http://localhost:5000' + el.images[0].url} alt="Zapatillas" />
+                                        <div className="item-details">
+                                            <h3>{el.name}</h3>
+                                            <p>Talla: 38 · Color: Negro/Rojo</p>
+                                            <div className="item-price">${el.price}</div>
+                                        </div>
+                                        <div className="item-qty">x{el.quantity}</div>
                                     </div>
-                                    <div className="item-qty">x1</div>
-                                </div>
+                                ))}
 
-                                <div className="order-item">
-                                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapatillas" />
-                                    <div className="item-details">
-                                        <h3>Adidas Ultraboost</h3>
-                                        <p>Talla: 40 · Color: Blanco/Negro</p>
-                                        <div className="item-price">$159.99</div>
-                                    </div>
-                                    <div className="item-qty">x2</div>
-                                </div>
+
                             </div>
 
                             <div className="order-totals">
                                 <div className="total-row">
                                     <span>Subtotal</span>
-                                    <span>$469.97</span>
+                                    <span>${order.total}</span>
                                 </div>
                                 <div className="total-row">
                                     <span>Envío</span>
-                                    <span>$9.99</span>
+                                    <span>$0</span>
                                 </div>
                                 <div className="total-row discount">
                                     <span>Descuento</span>
-                                    <span>-$30.00</span>
+                                    <span>-$0.00</span>
                                 </div>
                                 <div className="total-row grand-total">
                                     <span>Total</span>
-                                    <span>$449.96</span>
+                                    <span>${order.total}</span>
                                 </div>
                             </div>
 
-                            <div className="coupon-section">
-                                <input type="text" placeholder="Código de descuento" />
-                                <button className="apply-btn">Aplicar</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
