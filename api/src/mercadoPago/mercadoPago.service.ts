@@ -24,12 +24,12 @@ export class MercadoPagoService {
           picture_url: 'https://ejemplo.com/imagen.jpg' // Opcional pero recomendado
         })),
         back_urls: {
-          success: 'https://tu-frontend.com/success',
+          success: 'https://brayanweb.com/servicios/',
           failure: 'https://tu-frontend.com/failure',
           pending: 'https://tu-frontend.com/pending' // Recomendado añadir
         },
         auto_return: 'approved',
-        notification_url: 'https://2d359b4b06bf.ngrok-free.app/api/mercadopago/webhook',
+        notification_url: 'https://5f9f260b6e8a.ngrok-free.app/api/mercadopago/webhook',
         metadata: order,
         statement_descriptor: 'TIENDASNEAKER' // Nombre que aparecerá en el resumen de tarjeta
       };

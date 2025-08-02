@@ -5,6 +5,7 @@ import MainLayout from "./layouts/MainLayout"
 import { DetailProduct } from "./pages/detail/DetailProduct"
 import { Cart } from "./pages/cart/Cart"
 import { Checkout } from "./pages/checkout/Checkout"
+import { Success } from "./pages/checkout/Success"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="product/:id" element={<DetailProduct/>}/>
             <Route path="cart" element={<Cart/>}/>
             <Route path="checkout" element={<Checkout/>}/>
+            <Route path="payment/success" element={<Success/>}/>
         </Route>
       </Routes>
       </Router>
