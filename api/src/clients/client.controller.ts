@@ -11,9 +11,9 @@ export class ClientController {
         this.clientService = new ClientService();
     }
 
-    async getClients(Req: Request, res: Response) {
+    async getClients(req: Request, res: Response) {
         try {
-
+            console.log(req.user)
             const clients:ResponseClientInterface[]= await this.clientService.getClients();
             res.status(200).json(clients);
 

@@ -8,21 +8,33 @@ import { OrderShoe } from "../relations/order-shoe.entity";
 import { Client } from "../clients/client.entity";
 
 
+
+
+
 export class OrderService {
     private orderRepository: Repository<Order>;
     private clientRepository: Repository<Client>;
     private shoeRepository: Repository<Shoe>;
     private orderShoeRepository: Repository<OrderShoe>;
 
+
     constructor() {
         this.orderRepository = AppDataSource.getRepository(Order);
         this.clientRepository = AppDataSource.getRepository(Client);
         this.shoeRepository = AppDataSource.getRepository(Shoe);
         this.orderShoeRepository = AppDataSource.getRepository(OrderShoe);
+
     }
 
     async getOrders() {
         return await this.orderRepository.find();
+    }
+
+    async getOrdersByClient(client_id: number) {
+        return await this.orderRepository.find({
+            where: { client: { id: client_id } },
+            relations: ['client', 'order_shoes', 'order_shoes.shoe', 'order_shoes.shoe.images']
+        });
     }
 
     async createOrder(order: OrderCreateI) {
@@ -32,6 +44,7 @@ export class OrderService {
             const clientRepo = manager.getRepository(Client);
             const shoeRepo = manager.getRepository(Shoe);
             const orderShoeRepo = manager.getRepository(OrderShoe);
+
 
             // Buscar cliente
             const clientFound = await clientRepo.findOne({ where: { id: order.client_id } });

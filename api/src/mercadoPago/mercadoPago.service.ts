@@ -29,7 +29,7 @@ export class MercadoPagoService {
           pending: 'https://tu-frontend.com/pending' // Recomendado añadir
         },
         auto_return: 'approved',
-        notification_url: 'https://5f9f260b6e8a.ngrok-free.app/api/mercadopago/webhook',
+        notification_url: 'https://4e4956c5c2fa.ngrok-free.app/api/mercadopago/webhook',
         metadata: order,
         statement_descriptor: 'TIENDASNEAKER' // Nombre que aparecerá en el resumen de tarjeta
       };

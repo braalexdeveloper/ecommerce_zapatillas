@@ -1,6 +1,10 @@
+import './types/global';
+
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+
 
 import { AppDataSource } from "./config/database";
 import categoryRoutes from './categories/category.route';
@@ -12,6 +16,7 @@ import userRoutes from './users/user.routes';
 import clientRoutes from './clients/client.routes';
 import orderRoutes from './orders/order.routes';
 import mercadoPagoRoutes from './mercadoPago/mercadoPago.routes';
+import authRoutes from './auth/auth.routes';
 import path from "path";
 
 dotenv.config();
@@ -19,7 +24,12 @@ dotenv.config();
 const app=express();
 
 //Middleware
-app.use(cors());
+app.use(cors({
+    origin:'http://localhost:5173',
+    credentials:true,//permite enviar cokkies
+}));
+
+app.use(cookieParser());
 app.use(express.json());
 app.use('/api',categoryRoutes);
 app.use('/api',brandRoutes);
@@ -30,6 +40,7 @@ app.use('/api',userRoutes);
 app.use('/api',clientRoutes);
 app.use('/api',orderRoutes);
 app.use('/api',mercadoPagoRoutes);
+app.use('/api',authRoutes);
 
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 

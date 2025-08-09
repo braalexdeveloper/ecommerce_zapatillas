@@ -23,6 +23,19 @@ export class OrderController {
         }
     }
 
+    async getOrdersByClient(req: Request, res: Response) {
+        try {
+            const orders = await this.orderService.getOrdersByClient(Number(req.params.id));
+            res.status(200).json(orders);
+        } catch (error) {
+            if (error instanceof NotFoundError) {
+                res.status(404).json({ error: error.message });
+            } else {
+                res.status(500).json({ error: error instanceof Error ? error.message : "Error al obtener ordenes" });
+            }
+        }
+    }
+
     async createOrder(req: Request, res: Response) {
         try {
          const order=await this.orderService.createOrder(req.body);

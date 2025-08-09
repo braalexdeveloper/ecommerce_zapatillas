@@ -3,5 +3,6 @@ export interface CreateClientInterface{
     lastName:string,
     dni:string,
     phone:string,
-    user_id?:number
+    user_id?:number,
+    email?:string
 }

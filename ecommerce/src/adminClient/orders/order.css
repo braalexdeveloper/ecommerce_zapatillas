@@ -1,0 +1,210 @@
+
+    /* Estilos para el dashboard que combinan con tu tema */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+    
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 28px;
+        color: #333;
+    }
+    
+    .order-filter select {
+        padding: 8px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    
+    .orders-list {
+        display: grid;
+        gap: 20px;
+    }
+    
+    .order-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .order-info {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .order-number {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .order-date {
+        font-size: 13px;
+        color: #777;
+    }
+    
+    .order-status {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .order-status.delivered {
+        background-color: #e6f7ee;
+        color: #00a76f;
+    }
+    
+    .order-status.shipped {
+        background-color: #e8f4fd;
+        color: #006c9c;
+    }
+    
+    .order-status.canceled {
+        background-color: #fde8e8;
+        color: #ff5630;
+    }
+    
+    .order-total {
+        font-weight: 600;
+        color: #6a0dad;
+    }
+    
+    .order-products {
+        padding: 15px 20px;
+    }
+    
+    .product-item {
+        display: flex;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .product-item:last-child {
+        border-bottom: none;
+    }
+    
+    .product-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 15px;
+    }
+    
+    .product-details {
+        flex: 1;
+    }
+    
+    .product-details h3 {
+        font-size: 15px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    
+    .product-details p {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+    
+    .product-price {
+        font-weight: 600;
+    }
+    
+    .product-quantity {
+        align-self: center;
+        color: #777;
+    }
+    
+    .order-actions {
+        display: flex;
+        gap: 10px;
+        padding: 15px 20px;
+        border-top: 1px solid #e0e0e0;
+        background-color: #f9f9f9;
+    }
+    
+    .action-btn {
+        padding: 8px 16px;
+        background-color: #6a0dad;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .action-btn:hover {
+        background-color: #5a0a9d;
+    }
+    
+    .action-btn.outline {
+        background-color: transparent;
+        border: 1px solid #6a0dad;
+        color: #6a0dad;
+    }
+    
+    .action-btn.outline:hover {
+        background-color: rgba(106, 13, 173, 0.05);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .order-header {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .order-info, .order-status, .order-total {
+            flex: 1 1 100%;
+        }
+        
+        .order-actions {
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            text-align: center;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .product-item {
+            flex-wrap: wrap;
+        }
+        
+        .product-item img {
+            margin-bottom: 10px;
+        }
+        
+        .product-details, .product-quantity {
+            flex: 1 1 100%;
+        }
+    }

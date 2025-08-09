@@ -1,0 +1,249 @@
+
+    /* Estilos para el login que combinan con tu tema */
+    .login-container {
+        padding: 40px 20px;
+        background-color: #f8f8f8;
+        min-height: calc(100vh - [altura-header] - [altura-footer]);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .login-wrapper {
+        max-width: 1000px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    .login-box {
+        padding: 40px;
+    }
+    
+    .login-title {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .login-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background-color: #6a0dad;
+    }
+    
+    .login-form {
+        margin-top: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #555;
+        font-weight: 500;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #6a0dad;
+    }
+    
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+    
+    .remember-me {
+        display: flex;
+        align-items: center;
+    }
+    
+    .remember-me input {
+        margin-right: 8px;
+    }
+    
+    .forgot-password {
+        color: #6a0dad;
+        font-size: 13px;
+        text-decoration: none;
+    }
+    
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+    
+    .login-button {
+        width: 100%;
+        padding: 14px;
+        background-color: #6a0dad;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .login-button:hover {
+        background-color: #5a0a9d;
+    }
+    
+    .login-divider {
+        margin: 30px 0;
+        text-align: center;
+        position: relative;
+    }
+    
+    .login-divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: #eee;
+        z-index: 1;
+    }
+    
+    .login-divider span {
+        position: relative;
+        z-index: 2;
+        background: white;
+        padding: 0 15px;
+        color: #777;
+        font-size: 14px;
+    }
+    
+    .social-login {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+    
+    .social-button {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: white;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
+    
+    .social-button.google {
+        color: #333;
+    }
+    
+    .social-button.google:hover {
+        border-color: #db4437;
+        background-color: rgba(219, 68, 55, 0.05);
+    }
+    
+    .social-button.facebook {
+        color: #1877f2;
+    }
+    
+    .social-button.facebook:hover {
+        border-color: #1877f2;
+        background-color: rgba(24, 119, 242, 0.05);
+    }
+    
+    .register-link {
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+    }
+    
+    .register-link a {
+        color: #6a0dad;
+        font-weight: 500;
+        text-decoration: none;
+    }
+    
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+    
+    .login-benefits {
+        background-color: #f5f5f5;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .login-benefits h2 {
+        font-size: 22px;
+        color: #333;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    
+    .benefits-list {
+        list-style: none;
+    }
+    
+    .benefits-list li {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: #555;
+    }
+    
+    .benefits-list i {
+        color: #6a0dad;
+        font-size: 18px;
+        margin-top: 2px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .login-wrapper {
+            grid-template-columns: 1fr;
+        }
+        
+        .login-benefits {
+            display: none;
+        }
+        
+        .login-box {
+            padding: 30px 20px;
+        }
+    }

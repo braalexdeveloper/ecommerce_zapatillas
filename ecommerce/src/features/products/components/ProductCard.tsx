@@ -12,8 +12,7 @@ export const ProductCard = ({ product }: Props) => {
     const addCart = (item: Product) => {
 
         addToCart(item);
-        
-
+       
     }
     return (
         <>
