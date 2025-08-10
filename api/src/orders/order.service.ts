@@ -78,4 +78,46 @@ export class OrderService {
             return orderCreated;
         });
     }
+
+    async createOrderWithUserAndClient(order: OrderCreateI) {
+        return await AppDataSource.transaction(async (manager) => {
+            // Repositorios dentro de la transacción
+            const orderRepo = manager.getRepository(Order);
+            const clientRepo = manager.getRepository(Client);
+            const shoeRepo = manager.getRepository(Shoe);
+            const orderShoeRepo = manager.getRepository(OrderShoe);
+
+
+            // Buscar cliente
+            const clientFound = await clientRepo.findOne({ where: { id: order.client_id } });
+            if (!clientFound) throw new NotFoundError("Cliente no encontrado");
+
+            // Crear la orden
+            const newOrder = {
+                address: order.address,
+                date_sale: new Date(),
+                total: order.total,
+                client: clientFound
+            };
+
+            const orderCreated = await orderRepo.save(newOrder);
+
+            // Crear los items de la orden
+            for (const el of order.order_shoes) {
+                const shoeFound = await shoeRepo.findOne({ where: { id: el.shoe_id } });
+                if (!shoeFound) throw new NotFoundError(`Zapatilla con ID ${el.shoe_id} no encontrada`);
+
+                const item = orderShoeRepo.create({
+                    quantity: el.quantity,
+                    subtotal: el.subtotal,
+                    shoe: shoeFound,
+                    order: orderCreated
+                });
+
+                await orderShoeRepo.save(item);
+            }
+
+            return orderCreated;
+        });
+    }
 }

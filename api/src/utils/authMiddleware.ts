@@ -43,3 +43,22 @@ export function verificarJWT(req:Request,res:Response,next:NextFunction){
     }
 */
 }
+
+export function verificarJWTOptional(req:Request,res:Response,next:NextFunction){
+    const token = req.cookies.token; // ✅ obtiene el token de las cookies
+  
+  try {
+    if (!token) {
+    req.user = null; // no hay token, invitado
+    return next();
+   
+  }
+    const decoded = jwt.verify(token,JWT_SECRET) as JwtPayloadI;
+    req.user = decoded;
+    next();
+  } catch (err) {
+      req.user = null; // token inválido, tratar como invitado
+    next();
+  }
+   
+}

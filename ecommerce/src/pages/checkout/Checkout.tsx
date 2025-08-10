@@ -68,7 +68,7 @@ export const Checkout = () => {
     }
 
     useEffect(() => {
-        let newTotal = carrito.reduce((sum, el) => sum + (el.subtotal ?? 0), 0);
+        let newTotal = carrito.reduce((sum, el) => sum + (Number(el.subtotal) ?? 0), 0);
         setOrder({
             ...order,
             total: newTotal

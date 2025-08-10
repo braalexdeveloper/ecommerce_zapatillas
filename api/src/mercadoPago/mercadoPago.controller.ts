@@ -15,7 +15,7 @@ const orderService=new OrderService();
 
 export const createPreference=async (req:Request,res:Response)=>{
 try {
-    const preferenceUrl=await mercadoPagoService.createPreference(req.body);
+    const preferenceUrl=await mercadoPagoService.createPreference(req.body,req.user);
     res.status(200).json({url:preferenceUrl});
 } catch (error) {
     res.status(500).json({msg:"Error al crear preferencia",error});
