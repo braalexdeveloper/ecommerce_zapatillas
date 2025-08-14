@@ -31,6 +31,7 @@ export const Login = () => {
     }
 
     const handleLogin=async()=>{
+        console.log(user)
         const userLoguer=await authLogin(user);
         
         if(userLoguer.id){
@@ -75,9 +76,11 @@ export const Login = () => {
                         </div>
 
                         <div className="social-login">
+                            <a href="http://localhost:5000/api/auth/google">
                             <button className="social-button google">
                                 <i className="fab fa-google"></i> Continuar con Google
                             </button>
+                            </a>
                             <button className="social-button facebook">
                                 <i className="fab fa-facebook-f"></i> Continuar con Facebook
                             </button>

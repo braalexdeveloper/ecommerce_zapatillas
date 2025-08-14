@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { getCart, type ProductCart } from '../../features/cart/services/CartService'
 import './checkout.css'
 import { type Order } from '../../features/checkout/types/Order';
-import { type ClientI } from '../../features/clients/types/Client';
-import { createClient } from '../../features/clients/service/ClientService';
+
+
 import { createOrder } from '../../features/checkout/service/OrderService';
 
 export const Checkout = () => {
@@ -12,7 +12,11 @@ export const Checkout = () => {
     const [order, setOrder] = useState<Order>({
         address: '',
         total: 0,
-        client_id: 0,
+        name: '',
+        lastName: '',
+        dni: '',
+        phone: '',
+        email: '',
         order_shoes: carrito.map((el) => {
             return {
                 shoe_id: Number(el.id),
@@ -30,40 +34,19 @@ export const Checkout = () => {
         });
     }
 
-    const [client, setClient] = useState<ClientI>({
-        name: '',
-        lastName: '',
-        dni: '',
-        phone: '',
-        email: ''
-    });
+  
 
-    const handleClient = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setClient({
-            ...client,
-            [name]: value
-        });
-
-
-    }
 
     const payment = async () => {
-        const clientCreated = await createClient(client);
-
-        if (clientCreated.client) {
-            const newOrder = {
-                ...order,
-                client_id: clientCreated.client.id
-            };
-
-            const createdOrder = await createOrder(newOrder);
+        
+console.log("este es el order: ",order)
+            const createdOrder = await createOrder(order);
             console.log(createdOrder)
             if (createdOrder.url) {
                 window.location.href = createdOrder.url.sandbox_url;
 
             }
-        }
+        
 
     }
 
@@ -74,7 +57,7 @@ export const Checkout = () => {
             total: newTotal
         })
         console.log(order)
-        console.log(client);
+        
     }, [carrito]);
 
     return (
@@ -106,11 +89,11 @@ export const Checkout = () => {
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label>Nombre*</label>
-                                        <input type="text" name='name' value={client?.name} onChange={handleClient} required />
+                                        <input type="text" name='name' value={order?.name} onChange={handleOrder} required />
                                     </div>
                                     <div className="form-group">
                                         <label>Apellido*</label>
-                                        <input type="text" name='lastName' value={client?.lastName} onChange={handleClient} required />
+                                        <input type="text" name='lastName' value={order?.lastName} onChange={handleOrder} required />
                                     </div>
                                 </div>
 
@@ -123,16 +106,16 @@ export const Checkout = () => {
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label>DNI*</label>
-                                        <input type="text" name='dni' value={client?.dni} onChange={handleClient} required />
+                                        <input type="text" name='dni' value={order?.dni} onChange={handleOrder} required />
                                     </div>
                                     <div className="form-group">
                                         <label>Teléfono*</label>
-                                        <input type="tel" name='phone' value={client?.phone} onChange={handleClient} required />
+                                        <input type="tel" name='phone' value={order?.phone} onChange={handleOrder} required />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label>Correo electrónico*</label>
-                                    <input type="email" name='email' value={client?.email} onChange={handleClient} required />
+                                    <input type="email" name='email' value={order?.email} onChange={handleOrder} required />
                                 </div>
 
                                 <h2 className="section-title">Método de Pago</h2>

@@ -17,7 +17,7 @@ export class Order{
     date_sale!:Date;
 
     @IsNotEmpty()
-    @Column()
+    @Column({type:'decimal',precision:10,scale:2})
     total!:number;
 
     @ManyToOne(()=>Client,client=>client.orders)

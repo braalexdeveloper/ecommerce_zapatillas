@@ -1,7 +1,11 @@
 export interface Order{
     address:string;
     total:number;
-    client_id:number;
+    name:string;
+    lastName:string;
+    dni:string;
+    phone?:string;
+    email:string;
     order_shoes:ItemCart[];
 }
 

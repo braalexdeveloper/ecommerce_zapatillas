@@ -5,6 +5,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
+import session from 'express-session';
+import passport from 'passport';
+import './auth/passport';
 
 import { AppDataSource } from "./config/database";
 import categoryRoutes from './categories/category.route';
@@ -29,8 +32,20 @@ app.use(cors({
     credentials:true,//permite enviar cokkies
 }));
 
+
+
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(session({
+  secret: 'un-secreto-muy-seguro',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/api',categoryRoutes);
 app.use('/api',brandRoutes);
 app.use('/api',shoeRoutes);
@@ -41,6 +56,30 @@ app.use('/api',clientRoutes);
 app.use('/api',orderRoutes);
 app.use('/api',mercadoPagoRoutes);
 app.use('/api',authRoutes);
+
+
+
+// Rutas Google
+app.get('/api/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/api/auth/google/callback', 
+  passport.authenticate('google', {session:false, failureRedirect: 'http://localhost:5173/login' }),
+  (req:any, res) => {
+     // lo que pusiste en done(null, {...userData, token})
+    const { token, ...userData } = req.user;
+
+    // guarda el JWT en cookie HTTPOnly
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,        // true en producción (HTTPS)
+      sameSite: "lax",      // "none" si frontend y backend están en dominios distintos con HTTPS
+      maxAge: 1000 * 60 * 60, // 1 hora (ajusta a tu gusto)
+    });
+    // Login exitoso
+    res.redirect('http://localhost:5173/me'); // o donde quieras
+  });
+
 
 app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 

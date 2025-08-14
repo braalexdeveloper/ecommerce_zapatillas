@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createPreference, webhookHandler } from './mercadoPago.controller';
-import { verificarJWT, verificarJWTOptional } from '../utils/authMiddleware';
+import { verificarJWTOptional } from '../utils/authMiddleware';
 
 
 const router = Router();

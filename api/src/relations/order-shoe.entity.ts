@@ -14,7 +14,7 @@ export class OrderShoe{
     quantity!:number;
 
     @IsNotEmpty()
-    @Column()
+    @Column({type:'decimal',precision:10,scale:2})
     subtotal!:number;
 
     @ManyToOne(()=>Order,order=>order.order_shoes,{onDelete:'CASCADE'})

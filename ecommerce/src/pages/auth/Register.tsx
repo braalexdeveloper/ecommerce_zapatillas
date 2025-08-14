@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './regsiter.css'
 
 export const Register=()=>{
@@ -29,7 +30,7 @@ export const Register=()=>{
         </form>
         
         <div className="login-redirect">
-            ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
+            ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
         </div>
     </div>
 </div>

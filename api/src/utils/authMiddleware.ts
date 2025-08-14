@@ -55,6 +55,7 @@ export function verificarJWTOptional(req:Request,res:Response,next:NextFunction)
   }
     const decoded = jwt.verify(token,JWT_SECRET) as JwtPayloadI;
     req.user = decoded;
+    
     next();
   } catch (err) {
       req.user = null; // token inválido, tratar como invitado

@@ -6,18 +6,25 @@ import { AppDataSource } from "../config/database";
 import { sendPasswordEmail } from "../utils/sendPasswordEmail";
 import { NotFoundError } from "../errors/NotFoundError";
 import { MercadoPagoI } from "./mercadoPagoI";
+import bcrypt from 'bcrypt';
+import { Role } from "../roles/role.entity";
+
 
 const clientMp = new MercadoPagoConfig({
-  accessToken: 'TEST-3040999168655523-072918-a093318c776ba087e-159627013',
+  accessToken: 'TEST-3040999168655523-072918-a093318c776ba0871edb0d64b4beb87e-159627013',
 });
+
+const SALT_ROUNDS=10;
 
 export class MercadoPagoService {
   private userRepository: Repository<User>;
   private clientRepository: Repository<Client>;
+  private roleRepository:Repository<Role>;
 
   constructor() {
     this.userRepository = AppDataSource.getRepository(User);
     this.clientRepository = AppDataSource.getRepository(Client);
+    this.roleRepository=AppDataSource.getRepository(Role);
   }
 
   // Crea usuario y cliente para usuario NO logueado
@@ -32,7 +39,12 @@ export class MercadoPagoService {
     const generatedPassword = 'ABC123xyz' + order.email.split('@')[0].substring(0, 3).toLowerCase();
     sendPasswordEmail(order.email, generatedPassword);
 
-    const newUser = await this.userRepository.save({ email: order.email, password: generatedPassword, role_id: 1 });
+    const hashPass=await bcrypt.hash(generatedPassword,SALT_ROUNDS);
+
+    const roleFound=await this.roleRepository.findOne({where:{name:'user'}});
+    if(!roleFound) throw new NotFoundError("Rol no encontrado");
+
+    const newUser = await this.userRepository.save({ email: order.email, password: hashPass, role:roleFound });
 
     const newClient = await this.clientRepository.save({
       name: order.name,
@@ -46,7 +58,7 @@ export class MercadoPagoService {
   }
 
   // Obtiene o crea cliente para usuario logueado
-  private async getOrCreateClientForUser(order: MercadoPagoI, user: User) {
+  private async getOrCreateClientForUser(order: MercadoPagoI, user:any) {
     let clientFound = await this.clientRepository.findOne({ where: { user: { id: user.id } } });
 
     if (!clientFound) {
@@ -65,8 +77,10 @@ export class MercadoPagoService {
     return clientFound;
   }
 
-  async createPreference(order: MercadoPagoI, user: User | null) {
+  async createPreference(order: MercadoPagoI, user:any) {
     try {
+      console.log("order: ",order)
+      console.log("req user mercarservice: ",user)
       if (!order.order_shoes || order.order_shoes.length === 0) {
         throw new Error("La orden debe contener al menos un producto");
       }
@@ -91,7 +105,7 @@ export class MercadoPagoService {
           title: `Zapatilla ID ${el.shoe_id}`,
           description: `Descripción del producto ${el.shoe_id}`,
           quantity: Number(el.quantity),
-          unit_price: Number((el.subtotal / el.quantity).toFixed(2)),
+          unit_price:parseFloat((el.subtotal / el.quantity).toFixed(2)),
           currency_id: 'PEN',
           picture_url: 'https://ejemplo.com/imagen.jpg',
         })),
@@ -101,7 +115,7 @@ export class MercadoPagoService {
           pending: 'https://tu-frontend.com/pending',
         },
         auto_return: 'approved',
-        notification_url: 'https://4e4956c5c2fa.ngrok-free.app/api/mercadopago/webhook',
+        notification_url: 'https://92a47070ebd5.ngrok-free.app/api/mercadopago/webhook',
         metadata: order,
         statement_descriptor: 'TIENDASNEAKER',
       };

@@ -11,6 +11,7 @@ import { Register } from "./pages/auth/Register"
 import { Orders } from "./adminClient/orders/orders"
 import { PrivateRoute } from "./adminClient/PrivateRoute"
 import { PublicRoute } from "./pages/auth/PublicRoute"
+import { SuccessGoogle } from "./pages/auth/SuccessGoogle"
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="payment/success" element={<Success />} />
+            <Route path="me" element={<SuccessGoogle/>} />
 
             <Route element={<PublicRoute />}>
               <Route path="login" element={<Login />} />

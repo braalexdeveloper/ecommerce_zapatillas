@@ -18,7 +18,7 @@ try {
     const preferenceUrl=await mercadoPagoService.createPreference(req.body,req.user);
     res.status(200).json({url:preferenceUrl});
 } catch (error) {
-    res.status(500).json({msg:"Error al crear preferencia",error});
+    res.status(500).json({error:error instanceof Error ? error.message :'error al crear preferencia'});
 }
 }
 

@@ -7,7 +7,9 @@ import bcrypt from 'bcrypt';
 import { ResponseAuthInterface } from "./responseAuth.interface";
 import { generateToken } from "../utils/jwt";
 import { Response } from "express";
+import { Role } from "../roles/role.entity";
 
+const SALT_ROUNDS=10;
 
 export class AuthService {
     private userRepository: Repository<User>;
@@ -50,6 +52,26 @@ export class AuthService {
 
         return userResponse;
     }
+
+    async register(user:AuthI){
+
+        return await AppDataSource.transaction(async(manager)=>{
+            const userRepo=manager.getRepository(User);
+            const roleRepo=manager.getRepository(Role);
+
+           if(!user.email || !user.password) throw new Error("Usuario y contraseña son obligatorios");
+        const userExist=await userRepo.findOne({where:{email:user.email}});
+        if(userExist) throw new Error("Email ya registrado!");
+        const passHash=await bcrypt.hash(user.password,SALT_ROUNDS);
+
+        const role=await roleRepo.findOne({where:{name:'user'}});
+        if(!role) throw new NotFoundError("Rol no existe");
+       const userCreated=await userRepo.save({email:user.email,password:passHash,role});
+       return userCreated;
+        });
+        
+    }
+
 
     
 }
