@@ -12,7 +12,7 @@ export const Orders = () => {
 
     const userContext=useContext(UserContext);
     if (!userContext) {
-  throw new Error("Logout must be used within a UserProvider");
+  throw new Error("Logout must be used within a UserProviderr");
 }
     const { logout,user }=userContext;
 
